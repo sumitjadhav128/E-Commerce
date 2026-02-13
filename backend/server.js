@@ -14,6 +14,11 @@ const port = 5000;
 // Middleware
 app.use(express.json());
 
+// for login, signup
+const cors = require("cors");
+app.use(cors());
+
+
 // Routes
 app.use("/api/auth", authRoutes);
 

@@ -76,9 +76,11 @@ router.post("/login", async (req, res) => {
 
     res.status(200).json({
       message: "Login successful",
-      token
-    });
-
+      token,
+       userId: user._id
+    }
+  );
+console.log(token, id);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -90,6 +92,6 @@ router.post("/login", async (req, res) => {
 router.get("/dashboard", authMiddleware, (req, res) => {
   res.json({
     message: "Welcome to dashboard",
-    user: req.user
+    user: req.user.id
   });
 });
