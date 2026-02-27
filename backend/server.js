@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 require("dotenv").config();
 const User = require("./models/User");
 const authMiddleware = require("./middleware/authMiddleware");
@@ -26,8 +27,10 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 
 // Product Routes
-
 app.use("/api/products", productRoutes);
+
+// Cart Routes
+app.use("/api/cart", cartRoutes);
 
 // MongoDB connection
 mongoose.connect("mongodb://127.0.0.1:27017/practice")
