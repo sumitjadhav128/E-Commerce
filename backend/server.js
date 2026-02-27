@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 require("dotenv").config();
 const User = require("./models/User");
 const authMiddleware = require("./middleware/authMiddleware");
@@ -31,6 +32,9 @@ app.use("/api/products", productRoutes);
 
 // Cart Routes
 app.use("/api/cart", cartRoutes);
+
+// Order Routes
+app.use("/api/order", orderRoutes);
 
 // MongoDB connection
 mongoose.connect("mongodb://127.0.0.1:27017/practice")
