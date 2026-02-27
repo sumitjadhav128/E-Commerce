@@ -57,4 +57,21 @@ router.post("/checkout", authMiddleware, async (req, res) => {
   }
 });
 
+// Get User Orders
+
+router.get("/my-orders", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const orders = await Order.find({ user: userId })
+      .populate("items.product")
+      .sort({ createdAt: -1 });
+
+    res.json(orders);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
