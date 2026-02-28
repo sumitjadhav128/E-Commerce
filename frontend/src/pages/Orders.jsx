@@ -31,6 +31,9 @@ function Orders() {
       {orders.map(order => (
         <div key={order._id} style={{ border: "1px solid gray", margin: "10px", padding: "10px" }}>
           <h3>Order ID: {order._id}</h3>
+          <h3>
+  User: {order.user?.name}
+</h3>
           <p>Status: {order.status}</p>
           <p>Total: ${order.totalAmount}</p>
           <p>Date: {new Date(order.createdAt).toLocaleString()}</p>
@@ -38,7 +41,7 @@ function Orders() {
           <h4>Items:</h4>
           {order.items.map(item => (
             <div key={item._id}>
-              <p>{item.product.name} × {item.quantity}</p>
+              <p>{item.product?.name} × {item.quantity}</p>
             </div>
           ))}
         </div>

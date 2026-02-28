@@ -64,6 +64,7 @@ router.get("/my-orders", authMiddleware, async (req, res) => {
     const userId = req.user.id;
 
     const orders = await Order.find({ user: userId })
+    .populate("user", "name email")
       .populate("items.product")
       .sort({ createdAt: -1 });
 
