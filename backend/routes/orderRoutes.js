@@ -6,6 +6,8 @@ const Cart = require("../models/Cart");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 
+
+//checkout
 router.post("/checkout", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -32,31 +34,22 @@ router.post("/checkout", authMiddleware, async (req, res) => {
     const newOrder = new Order({
       user: userId,
       items: orderItems,
-      totalAmount: total
+      totalAmount: total,
+      status: "Pending"
     });
 
     await newOrder.save();
 
-    // Reduce stock
-    for (let item of cart.items) {
-      await Product.findByIdAndUpdate(item.product._id, {
-        $inc: { stock: -item.quantity }
-      });
-    }
-
-    // Clear cart
-    cart.items = [];
-    await cart.save();
-
     res.json({
-      message: "Order placed successfully",
-      order: newOrder
+      message: "Order created. Proceed to payment.",
+      orderId: newOrder._id
     });
 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // Get User Orders
 router.get("/my-orders", authMiddleware, async (req, res) => {
@@ -108,4 +101,45 @@ router.patch("/:id/status", authMiddleware, adminMiddleware, async (req, res) =>
   }
 });
 
+//Payment Route
+router.post("/pay/:orderId", authMiddleware, async (req, res) => {
+  try {
+    const { success } = req.body; // true or false
+
+    const order = await Order.findById(req.params.orderId)
+      .populate("items.product");
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (!success) {
+      order.status = "Cancelled";
+      await order.save();
+      return res.json({ message: "Payment failed. Order cancelled." });
+    }
+
+    // Payment success
+    order.status = "Paid";
+    await order.save();
+
+    // Reduce stock
+    for (let item of order.items) {
+      await Product.findByIdAndUpdate(item.product._id, {
+        $inc: { stock: -item.quantity }
+      });
+    }
+
+    // Clear cart
+    await Cart.findOneAndUpdate(
+      { user: req.user.id },
+      { items: [] }
+    );
+
+    res.json({ message: "Payment successful. Order completed." });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 module.exports = router;

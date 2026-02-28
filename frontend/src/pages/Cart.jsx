@@ -81,8 +81,12 @@ const checkout = async () => {
   });
 
   const data = await res.json();
-  alert(data.message);
-  setCart({ items: [] });
+
+  if (data.orderId) {
+    navigate(`/payment/${data.orderId}`);
+  } else {
+    alert(data.message);
+  }
 };
 
   return (
