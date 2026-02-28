@@ -104,7 +104,7 @@ router.patch("/:id/status", authMiddleware, adminMiddleware, async (req, res) =>
 //Payment Route
 router.post("/pay/:orderId", authMiddleware, async (req, res) => {
   try {
-    const { success } = req.body; // true or false
+    const { success } = req.body;
 
     const order = await Order.findById(req.params.orderId)
       .populate("items.product");
@@ -119,11 +119,29 @@ router.post("/pay/:orderId", authMiddleware, async (req, res) => {
       return res.json({ message: "Payment failed. Order cancelled." });
     }
 
-    // Payment success
+    // 🔥 STOCK VALIDATION FIRST
+    for (let item of order.items) {
+  const updated = await Product.findOneAndUpdate(
+    {
+      _id: item.product._id,
+      stock: { $gte: item.quantity }
+    },
+    { $inc: { stock: -item.quantity } },
+    { new: true }
+  );
+
+  if (!updated) {
+    return res.status(400).json({
+      message: `Stock insufficient for ${item.product.name}`
+    });
+  }
+}
+
+    // If stock is valid → proceed
     order.status = "Paid";
     await order.save();
 
-    // Reduce stock
+    // Reduce stock safely
     for (let item of order.items) {
       await Product.findByIdAndUpdate(item.product._id, {
         $inc: { stock: -item.quantity }
