@@ -1,11 +1,12 @@
 const express = require("express");
 const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware")
 const bcrypt = require("bcryptjs");
 
 const router = express.Router();
 
-
+// signup route
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -69,7 +70,7 @@ router.post("/login", async (req, res) => {
 
     // 3️⃣ Generate JWT token
     const token = jwt.sign(
-      { id: user._id },
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -86,9 +87,12 @@ console.log(token, id);
   }
 });
 
+// admin login route
+router.get("/admin-test", authMiddleware, adminMiddleware, (req, res) => {
+  res.json({ message: "Welcome Admin" });
+});
 
-
-
+// dashboard
 router.get("/dashboard", authMiddleware, (req, res) => {
   res.json({
     message: "Welcome to dashboard",
