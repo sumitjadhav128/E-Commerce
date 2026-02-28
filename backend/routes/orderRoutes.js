@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
 const Cart = require("../models/Cart");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
@@ -58,7 +59,6 @@ router.post("/checkout", authMiddleware, async (req, res) => {
 });
 
 // Get User Orders
-
 router.get("/my-orders", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -69,6 +69,39 @@ router.get("/my-orders", authMiddleware, async (req, res) => {
       .sort({ createdAt: -1 });
 
     res.json(orders);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// admin get all orders
+router.get("/all", authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate("user", "name email")
+      .populate("items.product")
+      .sort({ createdAt: -1 });
+
+    res.json(orders);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+//update order status
+router.patch("/:id/status", authMiddleware, adminMiddleware, async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    res.json(updatedOrder);
 
   } catch (err) {
     res.status(500).json({ error: err.message });
