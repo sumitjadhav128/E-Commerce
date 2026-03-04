@@ -24,7 +24,12 @@ router.post(
         price,
         stock,
         description,
-        image: req.file ? req.file.path : null
+       image: req.file
+          ? {
+              url: req.file.path,
+              public_id: req.file.filename
+            }
+          : null
       });
       console.log(product)
       await product.save();
@@ -65,14 +70,46 @@ router.put("/:id", authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 //Delete Product Route
-router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
-  try {
-    await Product.findByIdAndDelete(req.params.id);
-    res.json({ message: "Product deleted successfully" });
+// const cloudinary = require("../config/cloudinary"); this is wrong 
+ const {cloudinary} = require("../config/cloudinary");
 
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+router.delete(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  async (req, res) => {
+    try {
+      const product = await Product.findById(req.params.id);
+
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      // 🔥 DELETE IMAGE FROM CLOUDINARY
+      // if (product.image?.public_id) {
+      //   await cloudinary.uploader.destroy(product.image.public_id);
+      // }
+
+      // 🔥 SAFE DELETE LOGIC
+      if (
+        product.image &&
+        typeof product.image === "object" &&
+        product.image.public_id
+      ) {
+        // console.log(cloudinary);
+        await cloudinary.uploader.destroy(product.image.public_id);
+      }
+      
+      await product.deleteOne();
+     
+      res.json({ message: "Product and image deleted successfully" });
+    
+
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: err.message });
+    }
   }
-});
+);
 
 module.exports = router;

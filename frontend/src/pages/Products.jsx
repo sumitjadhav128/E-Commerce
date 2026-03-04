@@ -41,7 +41,7 @@ function Products() {
       {products.map(product => (
         <div key={product._id}>
           <img
-  src={product.image}
+  src={product.image?.url}
   alt={product.name}
   width="150"
 />

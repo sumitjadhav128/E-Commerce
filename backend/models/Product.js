@@ -4,7 +4,10 @@ const productSchema = new mongoose.Schema({
   name: String,
   description: String,
   price: Number,
-  image: String,
+  image: {
+  url: String,
+  public_id: String
+},
   stock: Number,
   createdAt: {
     type: Date,
