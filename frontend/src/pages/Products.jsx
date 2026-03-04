@@ -7,13 +7,31 @@ function Products() {
 const [minPrice, setMinPrice] = useState("");
 const [maxPrice, setMaxPrice] = useState("");
 const [sort, setSort] = useState("");
+const [currentPage, setCurrentPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
+// Replace the entire useEffect
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
-      .then(res => res.json())
-      .then(data => setProducts(data));
-  }, []);
+  fetchProducts(1);
+}, []);
+
+// product fetching
+  const fetchProducts = async (pageNumber = 1) => {
+  let url = `http://localhost:5000/api/products?page=${pageNumber}&limit=6`;
+
+  if (search) url += `&search=${search}`;
+  if (minPrice) url += `&minPrice=${minPrice}`;
+  if (maxPrice) url += `&maxPrice=${maxPrice}`;
+  if (sort) url += `&sort=${sort}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  setProducts(data.products);
+  setTotalPages(data.totalPages);
+  setCurrentPage(data.currentPage);
+};
 
   // Add "Add To Cart" Button in Products Page
   const addToCart = async (productId) => {
@@ -38,19 +56,6 @@ const [sort, setSort] = useState("");
   alert(data.message);
 };
 
-const fetchProducts = async () => {
-  let url = `http://localhost:5000/api/products?`;
-
-  if (search) url += `search=${search}&`;
-  if (minPrice) url += `minPrice=${minPrice}&`;
-  if (maxPrice) url += `maxPrice=${maxPrice}&`;
-  if (sort) url += `sort=${sort}`;
-
-  const res = await fetch(url);
-  const data = await res.json();
-
-  setProducts(data);
-};
 
   return (
     <div>
@@ -104,6 +109,17 @@ const fetchProducts = async () => {
 </button>
         </div>
       ))}
+      <div>
+  {Array.from({ length: totalPages }, (_, i) => (
+    <button
+      key={i + 1}
+      onClick={() => fetchProducts(i + 1)}
+      disabled={currentPage === i + 1}
+    >
+      {i + 1}
+    </button>
+  ))}
+</div>
     </div>
   );
 }

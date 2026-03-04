@@ -44,7 +44,14 @@ router.post(
 // get all products
 router.get("/", async (req, res) => {
   try {
-    const { search, minPrice, maxPrice, sort } = req.query;
+    const {
+      search,
+      minPrice,
+      maxPrice,
+      sort,
+      page = 1,
+      limit = 6
+    } = req.query;
 
     let filter = {};
 
@@ -62,18 +69,28 @@ router.get("/", async (req, res) => {
 
     let query = Product.find(filter);
 
-    // 📊 SORTING
-    if (sort === "low") {
-      query = query.sort({ price: 1 });
-    } else if (sort === "high") {
-      query = query.sort({ price: -1 });
-    }
+    // ↕ SORT
+    if (sort === "low") query = query.sort({ price: 1 });
+    if (sort === "high") query = query.sort({ price: -1 });
 
-    const products = await query;
+    // 📄 PAGINATION LOGIC
+    const skip = (Number(page) - 1) * Number(limit);
 
-    res.json(products);
+    const total = await Product.countDocuments(filter);
+
+    const products = await query
+      .skip(skip)
+      .limit(Number(limit));
+
+    res.json({
+      products,
+      total,
+      currentPage: Number(page),
+      totalPages: Math.ceil(total / limit)
+    });
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
