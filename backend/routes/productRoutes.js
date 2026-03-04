@@ -1,20 +1,40 @@
+require("dotenv").config();
 const express = require("express");
 const Product = require("../models/Product");
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
+const upload = require("../middleware/uploadMiddleware");
+
 
 const router = express.Router();
 
 //Product Admin Only
-router.post("/", authMiddleware, adminMiddleware, async (req, res) => {
-  try {
-    const product = new Product(req.body);
-    await product.save();
-    res.status(201).json(product);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+router.post(
+  "/add",
+  authMiddleware,
+  adminMiddleware,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      console.log(req.file)
+      const { name, price, stock, description } = req.body;
+
+      const product = new Product({
+        name,
+        price,
+        stock,
+        description,
+        image: req.file ? req.file.path : null
+      });
+      console.log(product)
+      await product.save();
+
+      res.status(201).json(product);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   }
-});
+);
 
 // get all products
 router.get("/", async (req, res) => {

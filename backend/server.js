@@ -1,15 +1,13 @@
+
 const express = require("express");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const orderRoutes = require("./routes/orderRoutes");
-require("dotenv").config();
 const User = require("./models/User");
 const authMiddleware = require("./middleware/authMiddleware");
-
-
-
+require("dotenv").config;
 
 const app = express();
 const port = 5000;
