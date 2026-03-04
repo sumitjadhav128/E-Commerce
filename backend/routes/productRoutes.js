@@ -160,4 +160,49 @@ router.delete(
   }
 );
 
+// Added Review Route
+
+router.post("/:id/review", authMiddleware, async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // 🚫 Prevent duplicate review
+    const alreadyReviewed = product.reviews.find(
+      (r) => r.user.toString() === req.user.id
+    );
+
+    if (alreadyReviewed) {
+      return res.status(400).json({ message: "You already reviewed this product" });
+    }
+
+    const review = {
+      user: req.user.id,
+      name: req.user.name,   // must exist in JWT
+      rating: Number(rating),
+      comment
+    };
+
+    product.reviews.push(review);
+
+    // ⭐ Recalculate average rating
+    product.averageRating =
+      product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      product.reviews.length;
+
+    await product.save();
+
+    res.json({ message: "Review added successfully" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

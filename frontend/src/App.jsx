@@ -9,6 +9,7 @@ import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
 import Payment from "./pages/Payment";
 import AdminAddProduct from "./pages/AdminAddProduct";
+import ProductDetails from "./pages/ProductDetails";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route path="/admin/orders" element={<AdminOrders />} />
       <Route path="/payment/:orderId" element={<Payment />} />
       <Route path="/admin/add-product" element={<AdminAddProduct />} />
+      <Route path="/product/:id" element={<ProductDetails />} />
     </Routes>
   );
 }

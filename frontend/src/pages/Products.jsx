@@ -107,6 +107,9 @@ const [totalPages, setTotalPages] = useState(1);
     <button onClick={() => navigate("/cart")}>
   Go To Cart
 </button>
+<button onClick={() => navigate(`/product/${product._id}`)}>
+  View Details
+</button>
         </div>
       ))}
       <div>
