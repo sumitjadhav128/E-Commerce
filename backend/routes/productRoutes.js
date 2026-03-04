@@ -43,8 +43,39 @@ router.post(
 
 // get all products
 router.get("/", async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
+  try {
+    const { search, minPrice, maxPrice, sort } = req.query;
+
+    let filter = {};
+
+    // 🔍 SEARCH
+    if (search) {
+      filter.name = { $regex: search, $options: "i" };
+    }
+
+    // 💰 PRICE FILTER
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = Number(minPrice);
+      if (maxPrice) filter.price.$lte = Number(maxPrice);
+    }
+
+    let query = Product.find(filter);
+
+    // 📊 SORTING
+    if (sort === "low") {
+      query = query.sort({ price: 1 });
+    } else if (sort === "high") {
+      query = query.sort({ price: -1 });
+    }
+
+    const products = await query;
+
+    res.json(products);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // get single products
@@ -99,7 +130,7 @@ router.delete(
         // console.log(cloudinary);
         await cloudinary.uploader.destroy(product.image.public_id);
       }
-      
+
       await product.deleteOne();
      
       res.json({ message: "Product and image deleted successfully" });
