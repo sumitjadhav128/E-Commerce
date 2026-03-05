@@ -12,7 +12,7 @@ const adminOnly = (req, res, next) => {
   }
   next();
 };
-
+// Revenue check middleware
 router.get("/analytics", authMiddleware, adminOnly, async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
@@ -52,4 +52,106 @@ const pendingCount = await Order.countDocuments({
   }
 });
 
+// Advanced Revenue check middleware
+router.get("/advanced-analytics", authMiddleware, adminOnly, async (req, res) => {
+  try {
+
+    // 📈 Revenue per day
+    const revenuePerDay = await Order.aggregate([
+      { $match: { isPaid: true } },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+          },
+          revenue: { $sum: "$totalPrice" }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    // 📊 Monthly revenue
+    const monthlyRevenue = await Order.aggregate([
+      { $match: { isPaid: true } },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          revenue: { $sum: "$totalPrice" }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    // 👥 New users this month
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0,0,0,0);
+
+    const newUsers = await User.countDocuments({
+      createdAt: { $gte: startOfMonth }
+    });
+
+    // 📦 Top selling products
+
+    // this shows Id's of the product
+    // const topProducts = await Order.aggregate([
+    //   { $unwind: "$items" },
+    //   {
+    //     $group: {
+    //       _id: "$items.product",
+    //       totalSold: { $sum: "$items.quantity" }
+    //     }
+    //   },
+    //   { $sort: { totalSold: -1 } },
+    //   { $limit: 5 }
+    // ]);
+
+    // This shows names of the product
+    const topProducts = await Order.aggregate([
+  { $unwind: "$items" },
+
+  {
+    $group: {
+      _id: "$items.product",
+      totalSold: { $sum: "$items.quantity" }
+    }
+  },
+
+  { $sort: { totalSold: -1 } },
+
+  { $limit: 5 },
+
+  // 🔗 Join with Product collection
+  {
+    $lookup: {
+      from: "products",
+      localField: "_id",
+      foreignField: "_id",
+      as: "productInfo"
+    }
+  },
+
+  { $unwind: "$productInfo" },
+
+  {
+    $project: {
+      _id: 0,
+      name: "$productInfo.name",
+      totalSold: 1
+    }
+  }
+]);
+
+    res.json({
+      revenuePerDay,
+      monthlyRevenue,
+      newUsers,
+      topProducts
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
 module.exports = router;
