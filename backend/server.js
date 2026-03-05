@@ -6,6 +6,7 @@ const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const User = require("./models/User");
+const adminRoutes = require("./routes/adminRoutes");
 const authMiddleware = require("./middleware/authMiddleware");
 require("dotenv").config;
 
@@ -33,6 +34,9 @@ app.use("/api/cart", cartRoutes);
 
 // Order Routes
 app.use("/api/order", orderRoutes);
+
+//Admin Routes
+app.use("/api/admin", adminRoutes);
 
 // MongoDB connection
 mongoose.connect("mongodb://127.0.0.1:27017/practice")
