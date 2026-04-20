@@ -11,7 +11,7 @@ const authMiddleware = require("./middleware/authMiddleware");
 require("dotenv").config();
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
@@ -19,7 +19,7 @@ app.use(express.json());
 // for login, signup
 const cors = require("cors");
 app.use(cors({
-  origin: true
+  origin: "*",
 }));
 
 
@@ -43,7 +43,8 @@ app.use("/api/order", orderRoutes);
 app.use("/api/admin", adminRoutes);
 
 // MongoDB connection
-mongoose.connect("mongodb://127.0.0.1:27017/practice")
+const MONGO_URL = process.env.MONGO_URL
+mongoose.connect(MONGO_URL)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 
