@@ -45,8 +45,12 @@ app.use("/api/admin", adminRoutes);
 // MongoDB connection
 const MONGO_URL = process.env.MONGO_URL
 mongoose.connect(MONGO_URL)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
+  .then(() => {
+    console.log("✅ MongoDB connected");
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection failed:", err.message);
+  });
 
 
 app.get("/find", authMiddleware, async (req, res) => {
