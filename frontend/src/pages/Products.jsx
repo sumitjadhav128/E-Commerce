@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Product.css";
+import API_URL from "../utils/api";
 import Dashboard from "./Dashboard";
 
 function Products() {
@@ -19,7 +20,7 @@ const [totalPages, setTotalPages] = useState(1);
 }, []);
 
 // product fetching
-    const API_URL = "http://192.168.183.196:5000"; 
+    // const API_URL = "http://192.168.183.196:5000"; 
   const fetchProducts = async (pageNumber = 1) => {
   let url = `${API_URL}/api/products?page=${pageNumber}&limit=6`;
 
@@ -45,7 +46,7 @@ const [totalPages, setTotalPages] = useState(1);
     return;
   }
  
-    const API_URL = "http://192.168.183.196:5000"; 
+    // const API_URL = "http://192.168.183.196:5000"; 
     
   const res = await fetch(
     `${API_URL}/api/cart/add/${productId}`,

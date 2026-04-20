@@ -16,7 +16,7 @@ function Orders() {
       return;
     }
 
-    const API_URL = "http://192.168.183.196:5000";
+    // const API_URL = "http://192.168.183.196:5000";
 
     fetch(`${API_URL}/api/order/my-orders`, {
       headers: {

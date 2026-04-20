@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../utils/api";
 import "../css/Dashboard.css";
 
 
@@ -15,7 +16,7 @@ function Dashboard() {
       return;
     }
      
-   const API_URL = "http://192.168.183.196:5000";
+  //  const API_URL = "http://192.168.183.196:5000";
 
     fetch(`${API_URL}/api/auth/dashboard`, {
       headers: {

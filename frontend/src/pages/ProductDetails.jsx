@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import API_URL from "../utils/api";
 import "../css/ProductDetails.css";
 
 function ProductDetails() {
@@ -15,7 +16,7 @@ function ProductDetails() {
 
   // 🔥 Fetch Product
   useEffect(() => {
-     const API_URL = "http://192.168.183.196:5000";
+    //  const API_URL = "http://192.168.183.196:5000";
 
     const fetchProduct = async () => {
       try {
@@ -46,7 +47,7 @@ function ProductDetails() {
 
     try {
 
-       const API_URL = "http://192.168.183.196:5000";
+      //  const API_URL = "http://192.168.183.196:5000";
 
       const res = await fetch(
         `${API_URL}/api/products/${id}/review`,
