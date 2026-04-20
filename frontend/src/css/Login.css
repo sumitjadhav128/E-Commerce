@@ -1,0 +1,109 @@
+
+/* Form container */
+.handleLogin {
+  width: 90%;
+  max-width: 380px;
+  margin: auto;
+  margin-top: 50%;
+  padding: 35px 30px;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  animation: fadeIn 0.8s ease;
+}
+
+/* Title */
+.loginTitle {
+  text-align: center;
+  color:  #6a5acd;
+  margin-bottom: 10px;
+}
+
+/* Input group */
+.inputGroup input {
+  width: 100%;
+  padding: 12px 3px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+
+  transition: 0.3s ease;
+}
+
+/* Input focus */
+.inputGroup input:focus {
+  background: #fff;
+  box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+  transform: scale(1.02);
+}
+
+/* Button */
+.loginBtn {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #4a90e2, #6a5acd);
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+/* Button hover */
+.loginBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Extra text */
+.extraText {
+  text-align: center;
+  font-size: 15px;
+  color:  #6a5acd;
+}
+
+.extraText span button {
+  color: #3081c8;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+}
+
+.extraText span:hover {
+  text-decoration: underline;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .handleLogin {
+    padding: 25px 20px;
+  }
+}

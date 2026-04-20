@@ -1,0 +1,99 @@
+.orders {
+  padding: 20px;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+.orders-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.no-orders {
+  text-align: center;
+  color: gray;
+}
+
+/* Order Card */
+.order-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+/* Header */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.order-id {
+  font-size: 12px;
+  color: gray;
+  word-break: break-all;
+}
+
+.order-date {
+  font-size: 12px;
+  color: gray;
+}
+
+/* Status Badge */
+.status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: white;
+}
+
+/* Different statuses */
+.status.pending {
+  background: orange;
+}
+
+.status.shipped {
+  background: blue;
+}
+
+.status.delivered {
+  background: green;
+}
+
+/* Body */
+.order-body {
+  margin-bottom: 10px;
+}
+
+/* Items */
+.order-items h4 {
+  margin-bottom: 8px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .order-card {
+    padding: 12px;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .order-item {
+    font-size: 14px;
+  }
+}

@@ -8,7 +8,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const User = require("./models/User");
 const adminRoutes = require("./routes/adminRoutes");
 const authMiddleware = require("./middleware/authMiddleware");
-require("dotenv").config;
+require("dotenv").config();
 
 const app = express();
 const port = 5000;
@@ -18,7 +18,11 @@ app.use(express.json());
 
 // for login, signup
 const cors = require("cors");
-app.use(cors());
+app.use(cors({
+  origin: true
+}));
+
+
 
 
 // Routes
@@ -53,6 +57,6 @@ app.get("/find", authMiddleware, async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Running on port ${port}`);
 });

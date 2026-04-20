@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../utils/api";
+import "../css/AdminDashboard.css";
+import AdminAnalytics from "./AdminAnalytics";
 
 function AdminDashboard() {
   const [data, setData] = useState(null);
@@ -12,7 +15,7 @@ function AdminDashboard() {
       return;
     }
 
-    fetch("http://localhost:5000/api/admin/analytics", {
+    fetch(`${API_URL}/api/admin/analytics`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -31,39 +34,47 @@ function AdminDashboard() {
   if (!data) return <h2>Loading...</h2>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Admin Dashboard</h1>
+   <div className="admin-dashboard">
 
-      <div style={cardStyle}>
-        <h3>Total Users</h3>
-        <p>{data.totalUsers}</p>
-      </div>
+  <h1 className="dashboard-title">Admin Dashboard</h1>
 
-      <div style={cardStyle}>
-        <h3>Total Products</h3>
-        <p>{data.totalProducts}</p>
-      </div>
+  <div className="stats-grid">
 
-      <div style={cardStyle}>
-        <h3>Total Orders</h3>
-        <p>{data.totalOrders}</p>
-      </div>
-
-      <div style={cardStyle}>
-        <h3>Total Revenue</h3>
-        <p>₹{data.totalRevenue}</p>
-      </div>
-
-      <div style={cardStyle}>
-        <h3>Paid Orders</h3>
-        <p>{data.paidOrders}</p>
-      </div>
-
-      <div style={cardStyle}>
-        <h3>Pending Orders</h3>
-        <p>{data.pendingOrders}</p>
-      </div>
+    <div className="stat-card">
+      <h4>Total Users</h4>
+      <p>{data.totalUsers}</p>
     </div>
+
+    <div className="stat-card">
+      <h4>Total Products</h4>
+      <p>{data.totalProducts}</p>
+    </div>
+
+    <div className="stat-card">
+      <h4>Total Orders</h4>
+      <p>{data.totalOrders}</p>
+    </div>
+
+    <div className="stat-card">
+      <h4>Total Revenue</h4>
+      <p>₹{data.totalRevenue}</p>
+    </div>
+
+    <div className="stat-card">
+      <h4>Paid Orders</h4>
+      <p>{data.paidOrders}</p>
+    </div>
+
+    <div className="stat-card">
+      <h4>Pending Orders</h4>
+      <p>{data.pendingOrders}</p>
+    </div>
+
+  </div>
+
+<AdminAnalytics> </AdminAnalytics>
+
+</div>
   );
 }
 

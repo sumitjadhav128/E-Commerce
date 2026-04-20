@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/Login.css"
 
 function Login() {
   const [form, setForm] = useState({
@@ -19,7 +20,9 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:5000/api/auth/login", {
+   const API_URL = "http://192.168.183.196:5000";
+
+    const response = await fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -32,18 +35,45 @@ function Login() {
     if (data.token) {
       localStorage.setItem("token", data.token);
        localStorage.setItem("userId", data.userId);
-      navigate("/dashboard");
+      navigate("/products");
     } else {
       alert(data.message);
     }
   };
 
+   //signup
+  function signup() {
+ navigate("/signup")
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="email" placeholder="Email" onChange={handleChange} />
-      <input name="password" type="password" placeholder="Password" onChange={handleChange} />
-      <button type="submit">Login</button>
-    </form>
+   <form onSubmit={handleSubmit} className="handleLogin">
+  <h2 className="loginTitle">Welcome Back</h2>
+
+  <div className="inputGroup">
+    <input
+      name="email"
+      type="email"
+      placeholder="Email"
+      onChange={handleChange}
+    />
+  </div>
+
+  <div className="inputGroup">
+    <input
+      name="password"
+      type="password"
+      placeholder="Password"
+      onChange={handleChange}
+    />
+  </div>
+
+  <button type="submit" className="loginBtn">Login</button>
+
+  <p className="extraText">
+    Don't have an account? <span><button type="button" onClick={signup}>Sign up</button></span>
+  </p>
+</form>
   );
 }
 

@@ -12,6 +12,7 @@ import AdminAddProduct from "./pages/AdminAddProduct";
 import ProductDetails from "./pages/ProductDetails";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminAnalytics from "./pages/AdminAnalytics";
+import "./index.css";
 
 function App() {
   return (

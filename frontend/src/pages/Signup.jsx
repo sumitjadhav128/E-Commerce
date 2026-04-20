@@ -1,4 +1,7 @@
+
+import "../css/Signup.css";
 import { useState } from "react";
+
 
 function Signup() {
   const [form, setForm] = useState({
@@ -30,7 +33,7 @@ function Signup() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="handleSubmit">
       <input name="name" placeholder="Name" onChange={handleChange} />
       <input name="email" placeholder="Email" onChange={handleChange} />
       <input name="password" type="password" placeholder="Password" onChange={handleChange} />

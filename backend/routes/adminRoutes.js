@@ -13,7 +13,7 @@ const adminOnly = (req, res, next) => {
   next();
 };
 // Revenue check middleware
-router.get("/analytics", authMiddleware, adminOnly, async (req, res) => {
+router.get("/analytics", authMiddleware, async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     const totalProducts = await Product.countDocuments();
@@ -53,7 +53,7 @@ const pendingCount = await Order.countDocuments({
 });
 
 // Advanced Revenue check middleware
-router.get("/advanced-analytics", authMiddleware, adminOnly, async (req, res) => {
+router.get("/advanced-analytics", authMiddleware, async (req, res) => {
   try {
 
     // 📈 Revenue per day

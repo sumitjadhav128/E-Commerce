@@ -1,0 +1,62 @@
+.admin-dashboard {
+  padding: 20px;
+  background: #f7f8fa;
+  min-height: 100vh;
+}
+
+/* Title */
+.dashboard-title {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+/* Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+}
+
+/* Card */
+.stat-card {
+  background: #ffffff;
+  padding: 26px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Label */
+.stat-card h4 {
+  font-size: 13px;
+  color: #777;
+  margin: 0;
+}
+
+/* Value */
+.stat-card p {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Hover (subtle) */
+.stat-card:hover {
+  transform: translateY(-3px);
+  transition: 0.2s;
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-card p {
+    font-size: 18px;
+  }
+}

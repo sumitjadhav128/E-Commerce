@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../utils/api";
+import "../css/Cart.css";
 
 function Cart() {
   const [cart, setCart] = useState(null);
@@ -12,8 +14,9 @@ function Cart() {
       navigate("/");
       return;
     }
+    
 
-    fetch("http://localhost:5000/api/cart", {
+    fetch(`${API_URL}/api/cart`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -35,7 +38,7 @@ const updateQuantity = async (productId, action) => {
   const token = localStorage.getItem("token");
 
   const res = await fetch(
-    `http://localhost:5000/api/cart/update/${productId}`,
+    `${API_URL}/api/cart/update/${productId}`,
     {
       method: "PATCH",
       headers: {
@@ -56,7 +59,7 @@ const removeItem = async (productId) => {
   const token = localStorage.getItem("token");
 
   const res = await fetch(
-    `http://localhost:5000/api/cart/remove/${productId}`,
+  `${API_URL}/api/cart/remove/${productId}`,
     {
       method: "DELETE",
       headers: {
@@ -73,7 +76,7 @@ const removeItem = async (productId) => {
 const checkout = async () => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch("http://localhost:5000/api/order/checkout", {
+  const res = await fetch(`${API_URL}/api/order/checkout`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`
@@ -90,34 +93,59 @@ const checkout = async () => {
 };
 
   return (
-    <div>
-      <h1>Your Cart</h1>
+    <div className="cart-page">
 
-      {cart.items && cart.items.length === 0 && (
-        <p>Your cart is empty</p>
-      )}
+  <h1 className="cart-title">Your Cart</h1>
 
+  {cart.items && cart.items.length === 0 && (
+    <p className="empty-cart">Your cart is empty</p>
+  )}
+
+  <div className="cart-container">
+
+    {/* 🛒 Items */}
+    <div className="cart-items">
       {cart.items?.map(item => (
-        <div key={item.product._id}>
-          <h3>{item.product.name}</h3>
-          <p>Price: ${item.product.price}</p>
-          <p>Quantity: {item.quantity}</p>
-          <button onClick={() => updateQuantity(item.product._id, "increase")}>
-  +
-</button>
+        <div key={item.product._id} className="cart-item">
 
-<button onClick={() => updateQuantity(item.product._id, "decrease")}>
-  -
-</button>
+          <div className="item-info">
+            <h3>{item.product.name}</h3>
+            <p>₹{item.product.price}</p>
+          </div>
 
-<button onClick={() => removeItem(item.product._id)}>
-  Remove
-</button>
-          <h2>Total: ${total}</h2>
-          <button onClick={checkout}>Checkout</button>
+          <div className="item-actions">
+
+            <div className="quantity">
+              <button onClick={() => updateQuantity(item.product._id, "decrease")}>-</button>
+              <span>{item.quantity}</span>
+              <button onClick={() => updateQuantity(item.product._id, "increase")}>+</button>
+            </div>
+
+            <button
+              className="remove-btn"
+              onClick={() => removeItem(item.product._id)}
+            >
+              Remove
+            </button>
+
+          </div>
+
         </div>
       ))}
     </div>
+
+    {/* 💳 Summary */}
+    <div className="cart-summary">
+      <h2>Total: ₹{total}</h2>
+
+      <button className="checkout-btn" onClick={checkout}>
+        Checkout
+      </button>
+    </div>
+
+  </div>
+
+</div>
   );
 }
 

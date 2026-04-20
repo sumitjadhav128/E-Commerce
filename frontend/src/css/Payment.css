@@ -1,0 +1,90 @@
+.payment-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f7f8fa;
+  padding: 15px;
+}
+
+/* Card */
+.payment-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+
+  border: 1px solid #eee;
+}
+
+/* Title */
+.payment-title {
+  margin-bottom: 5px;
+}
+
+.payment-subtitle {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+/* Methods */
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.payment-methods label {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+}
+
+/* Summary */
+.payment-summary {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-bottom: 20px;
+}
+
+.payment-summary p {
+  font-size: 14px;
+  color: #777;
+}
+
+.payment-summary h2 {
+  margin: 5px 0;
+}
+
+/* Buttons */
+.payment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pay-btn {
+  background: #111;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pay-btn:hover {
+  opacity: 0.9;
+}
+
+.fail-btn {
+  background: #f5f5f5;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 📱 Mobile already optimized */

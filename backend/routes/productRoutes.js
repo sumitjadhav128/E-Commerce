@@ -16,7 +16,8 @@ router.post(
   upload.single("image"),
   async (req, res) => {
     try {
-      console.log(req.file)
+      console.log("FILE:", req.file);
+
       const { name, price, stock, description } = req.body;
 
       const product = new Product({
@@ -24,18 +25,20 @@ router.post(
         price,
         stock,
         description,
-       image: req.file
+        image: req.file
           ? {
-              url: req.file.path,
-              public_id: req.file.filename
+              url: req.file.path,        // Cloudinary URL
+              public_id: req.file.filename // Cloudinary ID
             }
-          : null
+          : undefined
       });
-      console.log(product)
+
       await product.save();
 
       res.status(201).json(product);
+
     } catch (err) {
+      console.log("ERROR:", err);
       res.status(500).json({ error: err.message });
     }
   }

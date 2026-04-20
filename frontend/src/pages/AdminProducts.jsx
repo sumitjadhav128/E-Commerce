@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import API_URL from "../utils/api";
+import "../css/AdminProducts.css";
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -6,9 +8,10 @@ function AdminProducts() {
   const token = localStorage.getItem("token");
 
   const fetchProducts = async () => {
-    const res = await fetch("http://localhost:5000/api/products");
+    const res = await fetch(`${API_URL}/api/products`);
     const data = await res.json();
-    setProducts(data);
+     console.log(data);
+    setProducts(data.products);
   };
 
   useEffect(() => {
@@ -16,7 +19,7 @@ function AdminProducts() {
   }, []);
 
   const deleteProduct = async (id) => {
-    await fetch(`http://localhost:5000/api/products/${id}`, {
+    await fetch(`${API_URL}/api/products/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`
@@ -27,21 +30,34 @@ function AdminProducts() {
   };
 
   return (
-    <div>
-      <h1>Admin Product Panel</h1>
+   <div className="admin-products">
 
-      {products.map(product => (
-        <div key={product._id} style={{ border: "1px solid gray", margin: 10, padding: 10 }}>
+  <h1 className="admin-title">Admin Product Panel</h1>
+
+  <div className="admin-grid">
+    {products.map(product => (
+      <div key={product._id} className="admin-card">
+
+        <div className="admin-info">
           <h3>{product.name}</h3>
-          <p>Price: ${product.price}</p>
-          <p>Stock: {product.stock}</p>
-
-          <button onClick={() => deleteProduct(product._id)}>
-            Delete
-          </button>
+          <p className="price">₹{product.price}</p>
+          <p className="stock">
+            Stock: {product.stock}
+          </p>
         </div>
-      ))}
-    </div>
+
+        <button
+          className="delete-btn"
+          onClick={() => deleteProduct(product._id)}
+        >
+          Delete
+        </button>
+
+      </div>
+    ))}
+  </div>
+
+</div>
   );
 }
 

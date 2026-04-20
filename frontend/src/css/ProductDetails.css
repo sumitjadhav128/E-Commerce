@@ -1,0 +1,122 @@
+.product-details {
+  padding: 15px;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+/* 🧱 Layout */
+.product-container {
+  display: flex;
+  gap: 20px;
+  background: var(--card-bg);
+  padding: 15px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+
+/* 🖼 Image */
+.product-image img {
+  width: 250px;
+  border-radius: var(--radius);
+}
+
+/* 📦 Info */
+.product-info {
+  flex: 1;
+}
+
+.product-info h1 {
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.rating {
+  margin-bottom: 10px;
+}
+
+.description {
+  margin-bottom: 15px;
+}
+
+/* 🛒 Button */
+.buy-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.buy-btn:hover {
+  background: var(--primary-dark);
+}
+
+/* ⭐ Reviews */
+.reviews-section {
+  margin-bottom: 20px;
+}
+
+.review-card {
+  background: var(--card-bg);
+  padding: 10px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 10px;
+}
+
+/* ✍️ Add Review */
+.add-review {
+  background: var(--card-bg);
+  padding: 15px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.add-review form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-review select,
+.add-review textarea {
+  padding: 8px;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+}
+
+.add-review button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* 📱 MOBILE */
+@media (max-width: 480px) {
+
+  .product-container {
+    flex-direction: column;
+  }
+
+  .product-image img {
+    width: 100%;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .buy-btn {
+    width: 100%;
+  }
+}

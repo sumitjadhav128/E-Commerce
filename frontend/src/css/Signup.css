@@ -1,0 +1,104 @@
+/* Form container */
+.handleSubmit {
+  max-width: 400px;
+  width: 90%;
+  margin: auto;
+  height: 300px;
+  margin-top: 50%;
+  padding: 30px;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  animation: fadeIn 0.8s ease;
+}
+
+/* Inputs */
+.handleSubmit input {
+  padding: 20px 55px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+
+  transition: all 0.3s ease;
+}
+
+/* Input focus */
+.handleSubmit input:focus {
+  background: #fff;
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.4);
+  transform: scale(1.02);
+}
+
+/* Placeholder */
+.handleSubmit input::placeholder {
+  color: #777;
+}
+
+/* Button */
+.handleSubmit button {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #4a90e2, #6a5acd);
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+/* Button hover */
+.handleSubmit button:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Button click */
+.handleSubmit button:active {
+  transform: scale(0.98);
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .handleSubmit {
+    padding: 20px;
+  }
+
+  .handleSubmit input {
+    font-size: 13px;
+    padding: 15px 5px;
+  }
+
+  .handleSubmit button {
+    font-size: 14px;
+    padding: 15px;
+    margin-top: 25px;
+  }
+}

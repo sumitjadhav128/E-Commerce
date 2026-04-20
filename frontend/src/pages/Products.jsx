@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/Product.css";
+import Dashboard from "./Dashboard";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -17,8 +19,9 @@ const [totalPages, setTotalPages] = useState(1);
 }, []);
 
 // product fetching
+    const API_URL = "http://192.168.183.196:5000"; 
   const fetchProducts = async (pageNumber = 1) => {
-  let url = `http://localhost:5000/api/products?page=${pageNumber}&limit=6`;
+  let url = `${API_URL}/api/products?page=${pageNumber}&limit=6`;
 
   if (search) url += `&search=${search}`;
   if (minPrice) url += `&minPrice=${minPrice}`;
@@ -41,9 +44,11 @@ const [totalPages, setTotalPages] = useState(1);
     alert("Please login first");
     return;
   }
-
+ 
+    const API_URL = "http://192.168.183.196:5000"; 
+    
   const res = await fetch(
-    `http://localhost:5000/api/cart/add/${productId}`,
+    `${API_URL}/api/cart/add/${productId}`,
     {
       method: "POST",
       headers: {
@@ -58,72 +63,90 @@ const [totalPages, setTotalPages] = useState(1);
 
 
   return (
-    <div>
-      <div>
-  <input
-    type="text"
-    placeholder="Search..."
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-  />
+    <div className="products-page">
 
-  <input
-    type="number"
-    placeholder="Min Price"
-    value={minPrice}
-    onChange={(e) => setMinPrice(e.target.value)}
-  />
+  {/* 🔍 Filters */}
+  <div className="filters-container">
+    <h3 className="filter-title">Filter Products</h3>
 
-  <input
-    type="number"
-    placeholder="Max Price"
-    value={maxPrice}
-    onChange={(e) => setMaxPrice(e.target.value)}
-  />
+    <div className="filters">
+      <input
+        type="text"
+        placeholder="Search..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-  <select onChange={(e) => setSort(e.target.value)}>
-    <option value="">Sort</option>
-    <option value="low">Price: Low to High</option>
-    <option value="high">Price: High to Low</option>
-  </select>
+      <input
+        type="number"
+        placeholder="Min Price"
+        value={minPrice}
+        onChange={(e) => setMinPrice(e.target.value)}
+      />
 
-  <button onClick={fetchProducts}>Apply</button>
-</div>
+      <input
+        type="number"
+        placeholder="Max Price"
+        value={maxPrice}
+        onChange={(e) => setMaxPrice(e.target.value)}
+      />
 
-      <h1>Products</h1>
+      <select onChange={(e) => setSort(e.target.value)}>
+        <option value="">Sort</option>
+        <option value="low">Price: Low to High</option>
+        <option value="high">Price: High to Low</option>
+      </select>
 
-      {products.map(product => (
-        <div key={product._id}>
-          <img
-  src={product.image?.url}
-  alt={product.name}
-  width="150"
-/>
-          <h3>{product.name}</h3>
-          <p>${product.price}</p>
-          <button onClick={() => addToCart(product._id)}>
-      Add To Cart
-    </button>
-    <button onClick={() => navigate("/cart")}>
-  Go To Cart
-</button>
-<button onClick={() => navigate(`/product/${product._id}`)}>
-  View Details
-</button>
-        </div>
-      ))}
-      <div>
-  {Array.from({ length: totalPages }, (_, i) => (
-    <button
-      key={i + 1}
-      onClick={() => fetchProducts(i + 1)}
-      disabled={currentPage === i + 1}
-    >
-      {i + 1}
-    </button>
-  ))}
-</div>
+      <button onClick={() => fetchProducts(1)}>Apply</button>
     </div>
+  </div>
+
+  {/* Title */}
+  <h1 className="products-title">Products</h1>
+
+  {/* 🛍 Grid */}
+  <div className="products-grid">
+    {products.map(product => (
+      <div key={product._id} className="product-card">
+
+        <img
+          src={product.image?.url}
+          alt={product.name} height={"70px"}
+        />
+
+        <h3>{product.name}</h3>
+        <p className="price">₹{product.price}</p>
+
+        <div className="product-actions">
+          <button onClick={() => addToCart(product._id)}>
+            Add to Cart
+          </button>
+
+          <button onClick={() => navigate(`/product/${product._id}`)}>
+            View
+          </button>
+        </div>
+
+      </div>
+    ))}
+  </div>
+
+  {/* 📄 Pagination */}
+  <div className="pagination">
+    {Array.from({ length: totalPages }, (_, i) => (
+      <button
+        key={i + 1}
+        onClick={() => fetchProducts(i + 1)}
+        className={currentPage === i + 1 ? "active" : ""}
+      >
+        {i + 1}
+      </button>
+    ))}
+  </div>
+
+ {/*dashboard */}
+ <Dashboard></Dashboard>
+</div>
   );
 }
 

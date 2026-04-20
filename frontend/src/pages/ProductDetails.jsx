@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import "../css/ProductDetails.css";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -14,10 +15,12 @@ function ProductDetails() {
 
   // 🔥 Fetch Product
   useEffect(() => {
+     const API_URL = "http://192.168.183.196:5000";
+
     const fetchProduct = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/products/${id}`
+          `${API_URL}/api/products/${id}`
         );
         const data = await res.json();
         setProduct(data);
@@ -42,8 +45,11 @@ function ProductDetails() {
     }
 
     try {
+
+       const API_URL = "http://192.168.183.196:5000";
+
       const res = await fetch(
-        `http://localhost:5000/api/products/${id}/review`,
+        `${API_URL}/api/products/${id}/review`,
         {
           method: "POST",
           headers: {
@@ -65,8 +71,9 @@ function ProductDetails() {
       setComment("");
 
       // 🔁 Refresh product to show new review
+      
       const updated = await fetch(
-        `http://localhost:5000/api/products/${id}`
+        `${API_URL}/api/products/${id}`
       );
       const updatedData = await updated.json();
       setProduct(updatedData);
@@ -80,76 +87,82 @@ function ProductDetails() {
   if (!product) return <h2>Product not found</h2>;
 
   return (
-    <div style={{ padding: "20px" }}>
+   <div className="product-details">
+
+  <div className="product-container">
+
+    {/* 🖼 Image */}
+    <div className="product-image">
+      {product.image?.url && (
+        <img src={product.image.url} alt={product.name} height={"250px"}/>
+      )}
+    </div>
+
+    {/* 📦 Info */}
+    <div className="product-info">
       <h1>{product.name}</h1>
 
-      {product.image?.url && (
-        <img
-          src={product.image.url}
-          alt={product.name}
-          width="300"
-        />
-      )}
+      <p className="price">₹{product.price}</p>
 
-      <h3>Price: ₹{product.price}</h3>
-      <p>{product.description}</p>
+      <p className="rating">
+        {product.averageRating?.toFixed(1) || 0} ⭐
+      </p>
 
-      <h3>
-        Rating: {product.averageRating?.toFixed(1) || 0} ⭐
-      </h3>
+      <p className="description">{product.description}</p>
 
-      <hr />
-
-      <h2>Reviews</h2>
-
-      {product.reviews?.length === 0 && <p>No reviews yet.</p>}
-
-      {product.reviews?.map((review) => (
-        <div
-          key={review._id}
-          style={{
-            border: "1px solid #ccc",
-            padding: "10px",
-            marginBottom: "10px"
-          }}
-        >
-          <strong>{review.name}</strong>
-          <p>Rating: {review.rating} ⭐</p>
-          <p>{review.comment}</p>
-        </div>
-      ))}
-
-      <hr />
-
-      <h2>Add Review</h2>
-
-      <form onSubmit={submitReview}>
-        <label>Rating:</label>
-        <select
-          value={rating}
-          onChange={(e) => setRating(e.target.value)}
-        >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-
-        <br /><br />
-
-        <textarea
-          placeholder="Write your review..."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          required
-        />
-
-        <br /><br />
-
-        <button type="submit">Submit Review</button>
-      </form>
+      <button className="buy-btn">
+        Add to Cart
+      </button>
     </div>
+
+  </div>
+
+  {/* ⭐ Reviews */}
+  <div className="reviews-section">
+    <h2>Reviews</h2>
+
+    {product.reviews?.length === 0 && (
+      <p className="no-reviews">No reviews yet.</p>
+    )}
+
+    {product.reviews?.map((review) => (
+      <div key={review._id} className="review-card">
+        <strong>{review.name}</strong>
+        <p>⭐ {review.rating}</p>
+        <p>{review.comment}</p>
+      </div>
+    ))}
+  </div>
+
+  {/* ✍️ Add Review */}
+  <div className="add-review">
+    <h2>Add Review</h2>
+
+    <form onSubmit={submitReview}>
+      <select
+        value={rating}
+        onChange={(e) => setRating(e.target.value)}
+      >
+        <option value="">Rating</option>
+        <option value="1">1 ⭐</option>
+        <option value="2">2 ⭐</option>
+        <option value="3">3 ⭐</option>
+        <option value="4">4 ⭐</option>
+        <option value="5">5 ⭐</option>
+      </select>
+
+      <textarea
+        placeholder="Write your review..."
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+        required
+      />
+
+      <button type="submit">Submit Review</button>
+    </form>
+  </div>
+
+</div>
   );
 }
 

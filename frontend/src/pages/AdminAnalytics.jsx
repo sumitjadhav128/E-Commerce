@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
+import API_URL from "../utils/api";
+import "../css/AdminAnalytics.css";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,7 +30,7 @@ function AdminAnalytics() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/admin/advanced-analytics", {
+    fetch(`${API_URL}/api/admin/advanced-analytics`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -78,21 +80,39 @@ function AdminAnalytics() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Admin Analytics Dashboard</h1>
+    <div className="analytics-page">
 
-      <h2>📈 Revenue Per Day</h2>
-      <Line data={revenueDayData} />
+  <h1 className="analytics-title">Analytics Dashboard</h1>
 
-      <h2>📊 Monthly Revenue</h2>
-      <Bar data={monthlyRevenueData} />
-
-      <h2>📦 Top Selling Products</h2>
-      <Bar data={topProductsData} />
-
-      <h2>👥 New Users This Month</h2>
-      <h3>{data.newUsers}</h3>
+  {/* 👥 Top Stats */}
+  <div className="analytics-stats">
+    <div className="stat-box">
+      <h4>New Users</h4>
+      <p>{data.newUsers}</p>
     </div>
+  </div>
+
+  {/* 📈 Charts */}
+  <div className="charts-grid">
+
+    <div className="chart-card">
+      <h3>Revenue Per Day</h3>
+      <Line data={revenueDayData} />
+    </div>
+
+    <div className="chart-card">
+      <h3>Monthly Revenue</h3>
+      <Bar data={monthlyRevenueData} />
+    </div>
+
+    <div className="chart-card">
+      <h3>Top Selling Products</h3>
+      <Bar data={topProductsData} />
+    </div>
+
+  </div>
+
+</div>
   );
 }
 

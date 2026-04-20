@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/Dashboard.css";
 
 
 function Dashboard() {
@@ -13,8 +14,10 @@ function Dashboard() {
       navigate("/");
       return;
     }
+     
+   const API_URL = "http://192.168.183.196:5000";
 
-    fetch("http://localhost:5000/api/auth/dashboard", {
+    fetch(`${API_URL}/api/auth/dashboard`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -32,19 +35,39 @@ function Dashboard() {
   }, []);
 
   return (
-    <div>
-      <h1>{message}</h1>
-      <button onClick={() => {
-        localStorage.removeItem("token");
-        navigate("/");
-      }}>
-        Logout
+   <div className="dashboard">
+  <div className="dashboard-card">
+
+    {/* <h1 className="dashboard-title">{message}</h1> */}
+
+    <div className="dashboard-actions">
+      <button
+        className="btn primary"
+        onClick={() => navigate("/cart")}
+      >
+        My Cart
       </button>
 
-      <button onClick={() => navigate("/orders")}>
-  My Orders
-</button>
+      <button
+        className="btn primary"
+        onClick={() => navigate("/orders")}
+      >
+        My Orders
+      </button>
+
+      <button
+        className="btn logout"
+        onClick={() => {
+          localStorage.removeItem("token");
+          navigate("/");
+        }}
+      >
+        Logout
+      </button>
     </div>
+
+  </div>
+</div>
   );
 }
 

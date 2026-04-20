@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/Orders.css";
+import API_URL from "../utils/api";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -7,13 +9,16 @@ function Orders() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    
 
     if (!token) {
       navigate("/");
       return;
     }
 
-    fetch("http://localhost:5000/api/order/my-orders", {
+    const API_URL = "http://192.168.183.196:5000";
+
+    fetch(`${API_URL}/api/order/my-orders`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -23,30 +28,48 @@ function Orders() {
   }, []);
 
   return (
-    <div>
-      <h1>My Orders</h1>
+   <div className="orders">
+  <h1 className="orders-title">My Orders</h1>
 
-      {orders.length === 0 && <p>No orders yet.</p>}
+  {orders.length === 0 && (
+    <p className="no-orders">No orders yet.</p>
+  )}
 
-      {orders.map(order => (
-        <div key={order._id} style={{ border: "1px solid gray", margin: "10px", padding: "10px" }}>
-          <h3>Order ID: {order._id}</h3>
-          <h3>
-  User: {order.user?.name}
-</h3>
-          <p>Status: {order.status}</p>
-          <p>Total: ${order.totalAmount}</p>
-          <p>Date: {new Date(order.createdAt).toLocaleString()}</p>
+  {orders.map(order => (
+    <div key={order._id} className="order-card">
 
-          <h4>Items:</h4>
-          {order.items.map(item => (
-            <div key={item._id}>
-              <p>{item.product?.name} × {item.quantity}</p>
-            </div>
-          ))}
+      <div className="order-header">
+        <div>
+          <p className="order-id">Order ID: {order._id}</p>
+          <p className="order-date">
+            {new Date(order.createdAt).toLocaleString()}
+          </p>
         </div>
-      ))}
+
+        <div className={`status ${order.status}`}>
+          {order.status}
+        </div>
+      </div>
+
+      <div className="order-body">
+        <p><strong>User:</strong> {order.user?.name || "N/A"}</p>
+        <p><strong>Total:</strong> ₹{order.totalAmount}</p>
+      </div>
+
+      <div className="order-items">
+        <h4>Items</h4>
+
+        {order.items.map(item => (
+          <div key={item._id} className="order-item">
+            <span>{item.product?.name}</span>
+            <span>× {item.quantity}</span>
+          </div>
+        ))}
+      </div>
+
     </div>
+  ))}
+</div>
   );
 }
 

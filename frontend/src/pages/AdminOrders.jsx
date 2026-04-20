@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
+import API_URL from "../utils/api";
+import "../css/AdminOrders.css";
 
 function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const token = localStorage.getItem("token");
 
   const fetchOrders = async () => {
-    const res = await fetch("http://localhost:5000/api/order/all", {
+    const res = await fetch(`${API_URL}/api/order/all`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -20,7 +22,7 @@ function AdminOrders() {
   }, []);
 
   const updateStatus = async (id, status) => {
-    await fetch(`http://localhost:5000/api/order/${id}/status`, {
+    await fetch(`${API_URL}/api/order/${id}/status`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -33,18 +35,34 @@ function AdminOrders() {
   };
 
   return (
-    <div>
-      <h1>Admin Order Panel</h1>
+    <div className="admin-orders">
 
-      {orders.map(order => (
-        <div key={order._id} style={{ border: "1px solid gray", margin: 10, padding: 10 }}>
-          <h3>User: {order.user.name} ({order.user.email})</h3>
-          <p>Total: ${order.totalAmount}</p>
-          <p>Status: {order.status}</p>
+  <h1 className="admin-title">Orders</h1>
+
+  <div className="orders-list">
+    {orders.map(order => (
+      <div key={order._id} className="order-row">
+
+        <div className="order-left">
+          <h3>{order.user?.name || "User"}</h3>
+          <p className="email">{order.user?.email}</p>
+          <p className="date">
+            {new Date(order.createdAt).toLocaleDateString()}
+          </p>
+        </div>
+
+        <div className="order-middle">
+          <p className="amount">₹{order.totalAmount}</p>
+        </div>
+
+        <div className="order-right">
+          <span className={`status-badge ${order.status.toLowerCase()}`}>
+            {order.status}
+          </span>
 
           <select
-            onChange={(e) => updateStatus(order._id, e.target.value)}
             value={order.status}
+            onChange={(e) => updateStatus(order._id, e.target.value)}
           >
             <option>Pending</option>
             <option>Paid</option>
@@ -52,8 +70,12 @@ function AdminOrders() {
             <option>Delivered</option>
           </select>
         </div>
-      ))}
-    </div>
+
+      </div>
+    ))}
+  </div>
+
+</div>
   );
 }
 

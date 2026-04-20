@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../utils/api";
+import "../css/AdminAddProduct.css";
 
 function AdminAddProduct() {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ function AdminAddProduct() {
     formData.append("description", description);
     formData.append("image", image);
 
-    const res = await fetch("http://localhost:5000/api/products/add", {
+    const res = await fetch(`${API_URL}/api/products/add`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`
@@ -43,51 +45,62 @@ function AdminAddProduct() {
   };
 
   return (
-    <div>
-      <h1>Add Product</h1>
+   <div className="add-product-page">
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Product Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+  <div className="add-product-card">
 
-        <input
-          type="number"
-          placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          required
-        />
+    <h1>Add Product</h1>
 
-        <input
-          type="number"
-          placeholder="Stock"
-          value={stock}
-          onChange={(e) => setStock(e.target.value)}
-          required
-        />
+    <form onSubmit={handleSubmit} className="product-form">
 
-        <textarea
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
+      <input
+        type="text"
+        placeholder="Product Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
 
-        <input
-          type="file"
-          onChange={(e) => setImage(e.target.files[0])}
-          accept="image/*"
-          required
-        />
+      <input
+        type="number"
+        placeholder="Price"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+        required
+      />
 
-        <button type="submit">Add Product</button>
-      </form>
-    </div>
+      <input
+        type="number"
+        placeholder="Stock"
+        value={stock}
+        onChange={(e) => setStock(e.target.value)}
+        required
+      />
+
+      <textarea
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        required
+      />
+
+      <input
+        type="file"
+        onChange={(e) => setImage(e.target.files[0])}
+        accept="image/*"
+        className="file-input"
+        required
+      />
+
+      <button type="submit">
+        Add Product
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
   );
 }
 
