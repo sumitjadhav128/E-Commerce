@@ -45,7 +45,7 @@ app.use("/api/order", orderRoutes);
 app.use("/api/admin", adminRoutes);
 
 // Catch-all: send index.html for all other routes
-app.get("/*", (req, res) => {
+app.get("/:path(*)", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
