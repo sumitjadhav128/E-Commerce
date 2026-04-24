@@ -43,15 +43,17 @@ app.use("/api/order", orderRoutes);
 app.use("/api/admin", adminRoutes);
 
 // MongoDB connection
-const MONGO_URL = process.env.MONGO_URL
-mongoose.connect(MONGO_URL)
+mongoose.connect(process.env.MONGO_URL)
   .then(() => {
     console.log("✅ MongoDB connected");
+
+    app.listen(port, "0.0.0.0", () => {
+      console.log(`🚀 Server running on port ${port}`);
+    });
   })
-  .catch((err) => {
+  .catch(err => {
     console.error("❌ MongoDB connection failed:", err.message);
   });
-
 
 app.get("/find", authMiddleware, async (req, res) => {
   try {
