@@ -43,6 +43,7 @@ app.use("/api/order", orderRoutes);
 app.use("/api/admin", adminRoutes);
 
 // MongoDB connection
+console.log("ENV MONGO_URL:", process.env.MONGO_URL);
 mongoose.connect(process.env.MONGO_URL)
   .then(() => {
     console.log("✅ MongoDB connected");
