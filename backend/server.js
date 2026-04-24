@@ -1,5 +1,6 @@
 
 const express = require("express");
+const path = require("path");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
@@ -22,7 +23,8 @@ app.use(cors({
   origin: "*",
 }));
 
-
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, "build")));
 
 
 // Routes
@@ -41,6 +43,11 @@ app.use("/api/order", orderRoutes);
 
 //Admin Routes
 app.use("/api/admin", adminRoutes);
+
+// Catch-all: send index.html for all other routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 // MongoDB connection
 console.log("ENV MONGO_URL:", process.env.MONGO_URL);
