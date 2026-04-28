@@ -1,167 +1,371 @@
+/* ============================================
+   Product.css — FULL REPLACEMENT
+   Fixes:
+   1. Filter bar — compact single row
+   2. Product cards — better layout & image
+   3. Pagination — clears BottomNav
+   4. Search bar — separate, real-time suggestions
+   Keep your existing CSS variables (--bg, --card-bg etc.)
+   they are still used below
+============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+/* ---- Page ---- */
 .products-page {
-  padding: 10px;
-  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  padding: 12px 12px 0;
+  background: #f3f3f3;
   min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
 }
 
-/* 🔍 Filters */
-.filters-container {
-  background: var(--card-bg);
-  padding: 15px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  margin-bottom: 15px;
-}
+/* page-with-nav: defined in BottomNav.css, adds padding-bottom: 74px */
 
-.filter-title {
+/* ══════════════════════════════════════
+   SEARCH BAR (NEW)
+══════════════════════════════════════ */
+.search-bar-wrapper {
+  position: relative;
   margin-bottom: 10px;
-  font-size: 16px;
 }
 
-.filters {
+.search-bar {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  background: #fff;
+  border: 1.5px solid #d5d9d9;
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 44px;
+  gap: 8px;
+}
+
+.search-bar:focus-within {
+  border-color: #FF9900;
+  box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.15);
+}
+
+.search-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #0F1B2D;
+  background: transparent;
+}
+
+.search-input::placeholder {
+  color: #aaa;
+}
+
+.search-clear {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Suggestions Dropdown ── */
+.suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  z-index: 50;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.suggestion-item {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f5f5f5;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #0F1B2D;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item:active {
+  background: #fff8ee;
+  color: #FF9900;
+}
+
+/* ══════════════════════════════════════
+   COMPACT FILTER ROW (REDESIGNED)
+   Was: big card with title + wrapped inputs
+   Now: single tight horizontal row
+══════════════════════════════════════ */
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.filter-input {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #0F1B2D;
+  background: #fff;
+  border: 1.5px solid #d5d9d9;
+  border-radius: 6px;
+  outline: none;
+}
+
+.filter-input:focus {
+  border-color: #FF9900;
+}
+
+.filter-input::placeholder {
+  color: #aaa;
+  font-size: 12px;
+}
+
+.filter-select {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #0F1B2D;
+  background: #fff;
+  border: 1.5px solid #d5d9d9;
+  border-radius: 6px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 22px;
+}
+
+.filter-select:focus {
+  border-color: #FF9900;
+}
+
+.filter-apply {
+  height: 36px;
+  padding: 0 14px;
+  background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+  border: 1px solid #a88734;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #111;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-apply:active {
+  background: linear-gradient(to bottom, #eeb933, #f5d78e);
+}
+
+/* ══════════════════════════════════════
+   PRODUCTS TITLE
+══════════════════════════════════════ */
+.products-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F1B2D;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+
+/* ══════════════════════════════════════
+   PRODUCT GRID (REDESIGNED)
+══════════════════════════════════════ */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
-.filters input,
-.filters select {
-  padding: 8px;
-  border-radius: var(--radius);
-  border: 1px solid #ccc;
+/* ══════════════════════════════════════
+   PRODUCT CARD (REDESIGNED)
+   Clean white card, image on top,
+   info in middle, actions at bottom
+══════════════════════════════════════ */
+.product-card {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e8e8e8;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s;
+}
+
+.product-card:active {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Image container — fixed height, object-fit */
+.product-img-wrap {
+  width: 100%;
+  height: 130px;
+  background: #f9f9f9;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px; /* ADD THIS — gives image breathing room */
+}
+
+.product-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Info section */
+.product-info {
+  padding: 8px 10px 4px;
   flex: 1;
 }
 
-.filters button {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 8px;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-/* 🛍 Grid */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
-}
-
-/* 📦 Card */
-.product-card {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 10px;
-
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  text-align: center;
-}
-
-.product-card:hover {
-  transform: translateY(-4px);
-  transition: 0.3s;
-}
-
-/* 🖼 Image */
-.product-card img {
-  width: 100%;
-  height: 120px;
-  border-radius: var(--radius);
-}
-
-/* 📝 Title */
-.product-card h3 {
-  font-size: 14px;
-  margin: 5px 0;
-  height: 36px;
+.product-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0F1B2D;
+  margin: 0 0 4px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* 💰 Price */
 .price {
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F1B2D;
+  margin: 0;
 }
 
-/* 🔘 Actions */
+/* Action buttons */
 .product-actions {
-  margin-top: auto;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  gap: 6px;
+  padding: 8px 10px 10px;
 }
 
-.product-actions button {
-  padding: 6px;
-  border: none;
-  border-radius: var(--radius);
+.btn-cart {
+  flex: 1;
+  height: 34px;
+  background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+  border: 1px solid #a88734;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111;
   cursor: pointer;
-  font-size: 13px;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.product-actions button:first-child {
-  background: var(--primary);
-  color: white;
+.btn-cart:active {
+  background: linear-gradient(to bottom, #eeb933, #f5d78e);
 }
 
-.product-actions button:last-child {
-  background: #eee;
+.btn-view {
+  height: 34px;
+  padding: 0 12px;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0F1B2D;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* 📄 Pagination */
+.btn-view:active {
+  background: #e8e8e8;
+}
+
+/* ══════════════════════════════════════
+   PAGINATION (FIXED — clears BottomNav)
+══════════════════════════════════════ */
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  gap: 5px;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 20px 0 24px; /* bottom margin ensures it clears the nav */
+      padding-bottom: 43px;
 }
 
 .pagination button {
-  padding: 6px 10px;
-  border: none;
-  border-radius: var(--radius);
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid #d5d9d9;
+  border-radius: 6px;
+  background: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0F1B2D;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pagination button:active {
+  background: #f5f5f5;
 }
 
 .pagination .active {
-  background: var(--primary);
-  color: white;
+  background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+  border-color: #a88734;
+  font-weight: 700;
+  color: #111;
 }
 
-/* 📱 MOBILE (max 480px) */
-@media (max-width: 480px) {
-
-  .filters {
-    flex-direction: column;
-  }
-
-  .filters input,
-  .filters select,
-  .filters button {
-    width: 98%;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    display: grid;
-    row-gap: 38px;
-  }
-
-  .product-card img {
-    height: 100px;
-  }
-
-  .product-card h3 {
-    font-size: 13px;
-    height: 32px;
-  }
-
-  .product-actions button {
-    font-size: 12px;
-    padding: 5px;
-  }
-}
+/* ── Remove old unused classes (kept for safety, just zeroed out) ── */
+.filters-container { display: none; } /* REPLACED by .filters-row */
+.filters { display: none; }           /* REPLACED by .filters-row */
+.filter-title { display: none; }      /* REMOVED — no title needed */

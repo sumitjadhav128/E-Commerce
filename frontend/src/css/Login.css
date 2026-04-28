@@ -1,109 +1,284 @@
+/* =============================================
+   KOVA — Auth Design System
+   Shared across Login, Signup, and all auth pages
+   Colors: Navy #0F1B2D | Amber #FF9900 | White
+   Font: DM Sans
+============================================= */
 
-/* Form container */
-.handleLogin {
-  width: 90%;
-  max-width: 380px;
-  margin: auto;
-  margin-top: 50%;
-  padding: 35px 30px;
-  border-radius: 18px;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(14px);
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
-
+/* ---- Page ---- */
+.auth-page {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #f3f3f3;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-
-  animation: fadeIn 0.8s ease;
-}
-
-/* Title */
-.loginTitle {
-  text-align: center;
-  color:  #6a5acd;
-  margin-bottom: 10px;
-}
-
-/* Input group */
-.inputGroup input {
+  align-items: center;
+  padding: 20px 16px 40px;
   width: 100%;
-  padding: 12px 3px;
-  border-radius: 10px;
-  border: none;
-  outline: none;
-
-  background: rgba(255, 255, 255, 0.85);
-  font-size: 14px;
-
-  transition: 0.3s ease;
+  max-width: 430px;
+  margin: 0 auto;
 }
 
-/* Input focus */
-.inputGroup input:focus {
-  background: #fff;
-  box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
-  transform: scale(1.02);
+/* ---- Logo ---- */
+.auth-logo {
+  margin: 12px 0 20px;
 }
 
-/* Button */
-.loginBtn {
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-
-  background: linear-gradient(135deg, #4a90e2, #6a5acd);
-  color: white;
-
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-
-  transition: 0.3s ease;
+.auth-logo-text {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0F1B2D;
+  letter-spacing: -0.5px;
 }
 
-/* Button hover */
-.loginBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+.auth-logo-text::after {
+  content: '.';
+  color: #FF9900;
 }
 
-/* Extra text */
-.extraText {
+/* ---- Card ---- */
+.auth-card {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  padding: 20px 18px 22px;
+}
+
+.auth-card-secondary {
+  margin-top: 12px;
+  padding: 16px 18px;
   text-align: center;
-  font-size: 15px;
-  color:  #6a5acd;
 }
 
-.extraText span button {
-  color: #3081c8;
+/* ---- Title ---- */
+.auth-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0F1B2D;
+  margin-bottom: 18px;
+  letter-spacing: -0.3px;
+}
+
+/* ---- Form ---- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ---- Label row (label + forgot link) ---- */
+.auth-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.auth-label {
+  font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  border: none;
+  color: #0F1B2D;
 }
 
-.extraText span:hover {
+.auth-forgot {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ---- Input ---- */
+.auth-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #0F1B2D;
+  background: #ffffff;
+  border: 1.5px solid #a6a6a6;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.auth-input:focus {
+  border-color: #4a90d9;
+  box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.2);
+}
+
+.auth-input::placeholder {
+  color: #9aa0a6;
+  font-size: 13px;
+}
+
+/* ---- Real-time validation states (used in Signup) ---- */
+.auth-input.input-valid {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+}
+
+.auth-input.input-error {
+  border-color: #c62828;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.15);
+}
+
+.auth-input.input-valid:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.22);
+}
+
+.auth-input.input-error:focus {
+  border-color: #c62828;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.22);
+}
+
+/* ---- Password wrapper ---- */
+.auth-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-wrapper .auth-input {
+  padding-right: 56px;
+}
+
+.auth-toggle-pw {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0066c0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.auth-toggle-pw:hover {
+  color: #c45500;
   text-decoration: underline;
 }
 
-/* Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ---- Hint messages (used in Signup) ---- */
+.auth-hint {
+  font-size: 12px;
+  color: #555;
+  margin-top: 2px;
 }
 
-/* Mobile */
-@media (max-width: 480px) {
-  .handleLogin {
-    padding: 25px 20px;
-  }
+.auth-hint-error {
+  color: #c62828;
+  font-weight: 500;
+}
+
+.auth-hint-success {
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+/* ---- Primary Button ---- */
+.auth-btn-primary {
+  margin-top: 4px;
+  width: 100%;
+  height: 44px;
+  background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+  border: 1px solid #a88734;
+  border-radius: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.auth-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #f5d78e, #eeb933);
+}
+
+.auth-btn-primary:active:not(:disabled) {
+  background: linear-gradient(to bottom, #eeb933, #f5d78e);
+}
+
+.auth-btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---- Terms ---- */
+.auth-terms {
+  margin-top: 14px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.auth-link {
+  color: #0066c0;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  color: #c45500;
+  text-decoration: underline;
+}
+
+/* ---- Divider ---- */
+.auth-divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 0;
+  color: #767676;
+  font-size: 13px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #d5d9d9;
+}
+
+/* ---- Secondary Button ---- */
+.auth-btn-secondary {
+  display: block;
+  width: 100%;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  background: linear-gradient(to bottom, #f7f8f8, #e7e9ec);
+  border: 1px solid #adb1b8;
+  border-radius: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0F1B2D;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.auth-btn-secondary:hover {
+  background: linear-gradient(to bottom, #e7e9ec, #d9dce1);
 }

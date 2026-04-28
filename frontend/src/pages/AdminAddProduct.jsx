@@ -11,10 +11,29 @@ function AdminAddProduct() {
   const [stock, setStock] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith("image/")) return;
+    setImage(file);
+    setPreview(URL.createObjectURL(file));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("submitting form...");
+    setError("");
+    setLoading(true);
 
     const token = localStorage.getItem("token");
 
@@ -25,82 +44,160 @@ function AdminAddProduct() {
     formData.append("description", description);
     formData.append("image", image);
 
-    const res = await fetch(`${API_URL}/api/products/add`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
-      body: formData
-    });
+    try {
+      const res = await fetch(`${API_URL}/api/products/add`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      alert("Product added successfully");
-      navigate("/products");
-      
-    } else {
-      alert(data.message || "Error adding product");
+      if (res.ok) {
+        navigate("/products");
+      } else {
+        setError(data.message || "Error adding product");
+      }
+    } catch (err) {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-   <div className="add-product-page">
+    <div className="aap-root">
+      <div className="aap-container">
 
-  <div className="add-product-card">
+        {/* Header */}
+        <div className="aap-header">
+          <button className="aap-back-btn" onClick={() => navigate(-1)}>
+            ← Back
+          </button>
+          <div>
+            <h1 className="aap-title">Add Product</h1>
+            <p className="aap-subtitle">Fill in the details to list a new product</p>
+          </div>
+        </div>
 
-    <h1>Add Product</h1>
+        <div className="aap-layout">
 
-    <form onSubmit={handleSubmit} className="product-form">
+          {/* Left — Image Upload */}
+          <div className="aap-image-section">
+            <label className="aap-section-label">Product Image</label>
+            <div
+              className={`aap-dropzone ${preview ? "aap-dropzone--filled" : ""}`}
+              onDrop={handleDrop}
+              onDragOver={e => e.preventDefault()}
+              onClick={() => document.getElementById("aap-file-input").click()}
+            >
+              {preview ? (
+                <>
+                  <img src={preview} alt="Preview" className="aap-preview-img" />
+                  <div className="aap-preview-overlay">
+                    <span>Change Image</span>
+                  </div>
+                </>
+              ) : (
+                <div className="aap-dropzone-placeholder">
+                  <span className="aap-upload-icon">↑</span>
+                  <p className="aap-upload-text">Drag & drop or click to upload</p>
+                  <p className="aap-upload-hint">PNG, JPG, WEBP — max 5MB</p>
+                </div>
+              )}
+              <input
+                id="aap-file-input"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="aap-file-hidden"
+                required
+              />
+            </div>
+          </div>
 
-      <input
-        type="text"
-        placeholder="Product Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
+          {/* Right — Form Fields */}
+          <form className="aap-form" onSubmit={handleSubmit}>
 
-      <input
-        type="number"
-        placeholder="Price"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-        required
-      />
+            {error && (
+              <div className="aap-error-banner">
+                <span>⚠</span> {error}
+              </div>
+            )}
 
-      <input
-        type="number"
-        placeholder="Stock"
-        value={stock}
-        onChange={(e) => setStock(e.target.value)}
-        required
-      />
+            <div className="aap-field">
+              <label className="aap-label">Product Name</label>
+              <input
+                className="aap-input"
+                type="text"
+                placeholder="e.g. Nike Air Max 270"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                required
+              />
+            </div>
 
-      <textarea
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        required
-      />
+            <div className="aap-row">
+              <div className="aap-field">
+                <label className="aap-label">Price (₹)</label>
+                <div className="aap-input-prefix-wrap">
+                  <span className="aap-prefix">₹</span>
+                  <input
+                    className="aap-input aap-input--prefixed"
+                    type="number"
+                    placeholder="0"
+                    min="0"
+                    value={price}
+                    onChange={e => setPrice(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
 
-      <input
-        type="file"
-        onChange={(e) => setImage(e.target.files[0])}
-        accept="image/*"
-        className="file-input"
-        required
-      />
+              <div className="aap-field">
+                <label className="aap-label">Stock</label>
+                <input
+                  className="aap-input"
+                  type="number"
+                  placeholder="0"
+                  min="0"
+                  value={stock}
+                  onChange={e => setStock(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
 
-      <button type="submit">
-        Add Product
-      </button>
+            <div className="aap-field">
+              <label className="aap-label">Description</label>
+              <textarea
+                className="aap-textarea"
+                placeholder="Describe the product — material, features, sizing…"
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                required
+                rows={5}
+              />
+            </div>
 
-    </form>
+            <button
+              type="submit"
+              className="aap-submit-btn"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="aap-btn-loading">
+                  <span className="aap-btn-spinner" /> Adding Product…
+                </span>
+              ) : (
+                "Add Product"
+              )}
+            </button>
 
-  </div>
-
-</div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }
 

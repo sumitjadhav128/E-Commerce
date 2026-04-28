@@ -12,10 +12,15 @@ import AdminAddProduct from "./pages/AdminAddProduct";
 import ProductDetails from "./pages/ProductDetails";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminAnalytics from "./pages/AdminAnalytics";
+import AISupport from "./pages/AISupport";
+import AdminTickets from "./pages/AdminTickets";
+import { Toaster } from "react-hot-toast";
 import "./index.css";
 
 function App() {
   return (
+       <>
+    <Toaster position="top-center" />
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
@@ -30,7 +35,10 @@ function App() {
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
+      <Route path="/ai-support" element={<AISupport />} />
+      <Route path="/admin/tickets" element={<AdminTickets />} />
     </Routes>
+    </>
   );
 }
 

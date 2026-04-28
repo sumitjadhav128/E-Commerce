@@ -20,7 +20,7 @@ const orderSchema = new mongoose.Schema(
     totalAmount: Number,
     status: {
       type: String,
-      enum: ["Pending", "Paid", "Shipped", "Delivered"],
+      enum: ["Pending", "Paid", "Shipped", "Delivered", "Cancelled"],
       default: "Pending"
     }
   },

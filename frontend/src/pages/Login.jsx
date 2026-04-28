@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../utils/api";
-import "../css/Login.css"
+import toast from "react-hot-toast";
+import "../css/Login.css";
 
 function Login() {
   const [form, setForm] = useState({
     email: "",
     password: ""
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -20,8 +24,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-  //  const API_URL = "http://192.168.183.196:5000";
+    setLoading(true);
 
     const response = await fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
@@ -32,49 +35,107 @@ function Login() {
     });
 
     const data = await response.json();
+    setLoading(false);
 
     if (data.token) {
       localStorage.setItem("token", data.token);
-       localStorage.setItem("userId", data.userId);
+      localStorage.setItem("userId", data.userId);
+      toast.success("Welcome back!");
       navigate("/products");
     } else {
-      alert(data.message);
+      toast.error(data.message || "Login failed. Please try again.");
     }
   };
 
-   //signup
-  function signup() {
- navigate("/signup")
-  }
-
   return (
-   <form onSubmit={handleSubmit} className="handleLogin">
-  <h2 className="loginTitle">Welcome Back</h2>
+    <div className="auth-page">
 
-  <div className="inputGroup">
-    <input
-      name="email"
-      type="email"
-      placeholder="Email"
-      onChange={handleChange}
-    />
-  </div>
+      {/* Logo */}
+      <div className="auth-logo">
+        <span className="auth-logo-text">Nexkart</span>
+      </div>
 
-  <div className="inputGroup">
-    <input
-      name="password"
-      type="password"
-      placeholder="Password"
-      onChange={handleChange}
-    />
-  </div>
+      {/* Card */}
+      <div className="auth-card">
+        <h1 className="auth-title">Sign in</h1>
 
-  <button type="submit" className="loginBtn">Login</button>
+        <form onSubmit={handleSubmit} className="auth-form">
 
-  <p className="extraText">
-    Don't have an account? <span><button type="button" onClick={signup}>Sign up</button></span>
-  </p>
-</form>
+          {/* Email */}
+          <div className="auth-field">
+            <label className="auth-label" htmlFor="email">Email</label>
+            <input
+              id="email"
+              className="auth-input"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* Password */}
+          <div className="auth-field">
+            <div className="auth-label-row">
+              <label className="auth-label" htmlFor="password">Password</label>
+              <a href="/forgot-password" className="auth-link auth-forgot">Forgot password?</a>
+            </div>
+            <div className="auth-input-wrapper">
+              <input
+                id="password"
+                className="auth-input"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className="auth-toggle-pw"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            className="auth-btn-primary"
+            disabled={loading}
+          >
+            {loading ? "Signing in..." : "Sign in"}
+          </button>
+
+        </form>
+
+        <p className="auth-terms">
+          By signing in, you agree to our{" "}
+          <a href="/terms" className="auth-link">Conditions of Use</a> and{" "}
+          <a href="/privacy" className="auth-link">Privacy Notice</a>.
+        </p>
+      </div>
+
+      {/* Divider */}
+      <div className="auth-divider">
+        <span>New to Nexkart?</span>
+      </div>
+
+      {/* Create account */}
+      <div className="auth-card auth-card-secondary">
+        <button
+          type="button"
+          className="auth-btn-secondary"
+          onClick={() => navigate("/signup")}
+        >
+          Create your account
+        </button>
+      </div>
+
+    </div>
   );
 }
 

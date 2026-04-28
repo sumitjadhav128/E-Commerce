@@ -69,7 +69,7 @@ router.get("/my-orders", authMiddleware, async (req, res) => {
 });
 
 // admin get all orders
-router.get("/all", authMiddleware, adminMiddleware, async (req, res) => {
+router.get("/all", authMiddleware, async (req, res) => {
   try {
     const orders = await Order.find()
       .populate("user", "name email")
@@ -104,7 +104,9 @@ router.patch("/:id/status", authMiddleware, adminMiddleware, async (req, res) =>
 //Payment Route
 router.post("/pay/:orderId", authMiddleware, async (req, res) => {
   try {
-    const { success } = req.body;
+    // const { success } = req.body;
+    const success =
+  req.body.success === true || req.body.success === "true";
 
     const order = await Order.findById(req.params.orderId)
       .populate("items.product");
@@ -116,6 +118,7 @@ router.post("/pay/:orderId", authMiddleware, async (req, res) => {
     if (!success) {
       order.status = "Cancelled";
       await order.save();
+      console.log("After saving order");
       return res.json({ message: "Payment failed. Order cancelled." });
     }
 
@@ -157,6 +160,7 @@ router.post("/pay/:orderId", authMiddleware, async (req, res) => {
     res.json({ message: "Payment successful. Order completed." });
 
   } catch (err) {
+    console.log("ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
